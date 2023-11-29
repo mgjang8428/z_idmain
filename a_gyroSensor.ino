@@ -4,14 +4,12 @@ void gyroSetup() {
   gyro.init();
 }
 
-void gyroLoop() {
+GyroValue gyroLoop() {
   int x, y, z;
+  GyroValue gyroValue = { 0, 0, 0 };
   gyro.read(&x, &y, &z);
-  Serial.print("x: ");
-  Serial.print(x);
-  Serial.print(" y: ");
-  Serial.print(y);
-  Serial.print(" z: ");
-  Serial.print(z);
-  Serial.println();
+  gyroValue.x = x;
+  gyroValue.y = y;
+  gyroValue.z = z;
+  return gyroValue;
 }

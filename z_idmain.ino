@@ -6,6 +6,12 @@
 * LCD : SCL > D22, SDA > D21
 */
 
+/**
+* 설치 라이브러리 목록
+* ide: ArduinoJson, LiquidCrystal I2C
+* zip: MechaQMC5883(gy271), TinyGPSPlus
+*/
+
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <MechaQMC5883.h>
@@ -13,11 +19,20 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <HttpClient.h>
-//#include <ArduinoJson.h>
+#include <ArduinoJson.h>
 
 #include "_idHeader.h"
 
+GyroValue gv = { 0, 0, 0 };
+GpsValue gp = { false, 0, 0 };
+Data data = { DEVICENO, false, gv, gp };
+
+//test
+int loopLife = 1;
+
+
 void setup() {
+
   //pcSerial
   Serial.begin(115200);
   //gps
@@ -26,20 +41,24 @@ void setup() {
   Wire.begin(21, 22);
 
   wifiSetup();
-  wifiLoop();
-
-  // vibeSetup();
+  vibeSetup();
+  gyroSetup();
+  gpsSetup();
   // lcdSetup();
-  // gyroSetup();
+  delay(3000);
 }
 
 void loop() {
-  // vibeLoop();
-  // gyroLoop();
-  // gpsLoop();
-  // lcdLoop();
+  if (loopLife) {
+    data.vibeValue = vibeLoop();
+    data.gyroValue = gyroLoop();
+    data.gpsValue = gpsLoop();
+    // lcdLoop();
 
-  // wifiLoop();
-
-  delay(300);
+    wifiLoop(data);
+    //Test
+    Serial.println(makeDataToJson(data));
+    delay(1000);
+  }
+  // loopLife = 0;
 }
