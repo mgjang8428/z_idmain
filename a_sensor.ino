@@ -1,4 +1,29 @@
+//gyro object
+MechaQMC5883 gyro;
+//gps object
 TinyGPSPlus gps;
+
+void vibeSetup() {
+  pinMode(VIBESENSEPIN, INPUT);
+}
+
+bool vibeLoop() {
+  return digitalRead(VIBESENSEPIN);
+}
+
+void gyroSetup() {
+  gyro.init();
+}
+
+GyroValue gyroLoop() {
+  int x, y, z;
+  GyroValue gyroValue = { 0, 0, 0 };
+  gyro.read(&x, &y, &z);
+  gyroValue.x = x;
+  gyroValue.y = y;
+  gyroValue.z = z;
+  return gyroValue;
+}
 
 void gpsSetup() {}
 
