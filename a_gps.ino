@@ -4,10 +4,8 @@ void gpsSetup() {}
 
 GpsValue gpsLoop() {
   GpsValue gpsValue{ false, 0, 0 };
-  //updateSerial();
-  while (Serial2.available() > 0) {  //while(Serial2.available() > 0)
+  while (Serial2.available() > 0) {
     if (gps.encode(Serial2.read())) {
-      // displayInfo();
       if (gps.location.isValid()) {
         gpsValue.stat = true;
         gpsValue.lat = gps.location.lat();
@@ -23,23 +21,6 @@ GpsValue gpsLoop() {
     // Serial.println(F("No GPS detected: check wiring."));
     //while (true) {}
   }
-  // if (Serial2.available()) {
-  //   Serial.println("Serial2 OK!!");
-  //   if (gps.encode(Serial2.read())) {
-  //     Serial.println("gps.encode OK!!");
-  //     if (gps.location.isValid()) {
-  //       Serial.println("gps.isValid OK!!");
-  //       gpsValue.stat = true;
-  //       gpsValue.lat = gps.location.lat();
-  //       gpsValue.lng = gps.location.lng();
-  //     } else {
-  //       Serial.println("gps.InValid OK!!");
-  //       gpsValue.stat = false;
-  //       gpsValue.lat = 0;
-  //       gpsValue.lng = 0;
-  //     }
-  //   }
-  // }
   return gpsValue;
 }
 
