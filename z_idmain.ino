@@ -23,21 +23,21 @@
 
 #include "_idHeader.h"
 
+unsigned long task_time;
+unsigned long task_sensor;
+unsigned long task_net;
+
 GyroValue gv = { 0, 0, 0 };
 GpsValue gp = { false, 0, 0 };
 Data data = { DEVICENO, false, gv, gp };
 
-//test
-int loopLife = 1;
-
 
 void setup() {
-
   //pcSerial
   Serial.begin(115200);
-  //gps
+  //gpsSerial
   Serial2.begin(9600);
-  //gy271, lcd
+  //gy271, lcd Set
   Wire.begin(21, 22);
 
   wifiSetup();
@@ -49,16 +49,22 @@ void setup() {
 }
 
 void loop() {
-  if (loopLife) {
+  task_time = millis();
+
+  if (task_time - task_sensor >= 100) {
     data.vibeValue = vibeLoop();
     data.gyroValue = gyroLoop();
     data.gpsValue = gpsLoop();
-    // lcdLoop();
-
-    wifiLoop(data);
-    //Test
-    Serial.println(makeDataToJson(data));
-    delay(1000);
   }
-  // loopLife = 0;
+
+  if (task_time - task_net >= 1000) {
+    wifiLoop(data);
+  }
+
+  // lcdLoop();
+
+  
+  //Test
+  Serial.println(makeDataToJson(data));
+  delay(1000);
 }
