@@ -18,7 +18,7 @@
 #include <TinyGPSPlus.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <HttpClient.h>
+//#include <HttpClient.h>
 #include <ArduinoJson.h>
 
 #include "_idHeader.h"
@@ -40,11 +40,10 @@ void setup() {
   //gy271, lcd Set
   Wire.begin(21, 22);
 
-  wifiSetup();
   vibeSetup();
   gyroSetup();
   gpsSetup();
-  // lcdSetup();
+  lcdSetup();
   delay(3000);
 }
 
@@ -58,7 +57,12 @@ void loop() {
   }
 
   if (task_time - task_net >= 1000) {
-    wifiLoop(data);
+    if (WiFi.status() != WL_CONNECTED) {
+      wifiSetup();
+    }
+    if (WiFi.status() == WL_CONNECTED ) {
+      wifiLoop(data);
+    }
   }
 
   // lcdLoop();

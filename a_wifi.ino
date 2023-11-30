@@ -13,16 +13,17 @@ void wifiSetup() {
 void wifiLoop(Data data) {
   if(WiFi.status() == WL_CONNECTED) {
     net.begin(SERVER_URL);
+
     net.addHeader("Content-Type",  "application/json");
     String netRequestData = makeDataToJson(data);
+
     int netResponseCode = net.POST(netRequestData);
 
     if (netResponseCode > 0) {
       String response = net.getString();
-      Serial.println(netResponseCode);
-      Serial.println(response);
+      // Serial.println(netResponseCode);
+      // Serial.println(response);
     }
-
     net.end();
   }
 }

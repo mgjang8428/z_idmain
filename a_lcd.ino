@@ -15,3 +15,7 @@ void lcdLoop() {
   lcd.print(i);
   i++;
 }
+
+void lcd_deviceStart() {
+  lcd.clear();
+}
