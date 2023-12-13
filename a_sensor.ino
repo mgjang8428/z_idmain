@@ -11,18 +11,28 @@ bool vibeLoop() {
   return digitalRead(VIBESENSEPIN);
 }
 
-void gyroSetup() {
+GyroValue gyroSetup() {
+  int x, y, z;
+  GyroValue gv = { 0, 0, 0, 0, 0, 0 };
+  // gyro.softReset();
   gyro.init();
+
+  gyro.read(&x, &y, &z);
+  gv.initX = x;
+  gv.initY = y;
+  gv.initZ = z;
+
+  return gv;
 }
 
-GyroValue gyroLoop() {
+GyroValue gyroLoop(GyroValue gv) {
   int x, y, z;
-  GyroValue gyroValue = { 0, 0, 0 };
+  // GyroValue gyroValue = { 0, 0, 0, gv.initX, gv.initY, gv.initZ};
   gyro.read(&x, &y, &z);
-  gyroValue.x = x;
-  gyroValue.y = y;
-  gyroValue.z = z;
-  return gyroValue;
+  gv.x = (x - gv.initX);
+  gv.y = (y - gv.initY);
+  gv.z = (z - gv.initZ);
+  return gv;
 }
 
 void gpsSetup() {}
