@@ -14,11 +14,11 @@
 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <MechaQMC5883.h>
+// #include <MechaQMC5883.h>
+#include <MPU6050_light.h>
 #include <TinyGPSPlus.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-//#include <HttpClient.h>
 #include <ArduinoJson.h>
 
 #include "_idHeader.h"
@@ -30,6 +30,8 @@ unsigned long task_net;
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 TaskHandle_t Task3;
+
+MPU6050 mpu(Wire);
 
 GyroValue gv = { 0, 0, 0, 0, 0, 0 };
 GpsValue gp = { false, 0, 0 };
@@ -46,6 +48,7 @@ void setup() {
   Serial2.begin(9600);
   //gy271, lcd Set
   Wire.begin(21, 22);
+  // Wire1.begin(SDA_2, SCL_2);
 
   vibeSetup();
   gv = gyroSetup();
@@ -55,35 +58,9 @@ void setup() {
 }
 
 void loop() {
-  // task_time = millis();
+  mpu.update();
+  // delay(300);
 
-  // if (task_time - task_sensor >= 100) {
-  //   if (data.vibeValue == false) {
-  //     data.vibeValue = vibeLoop();
-  //   }
-  //   Serial.println(data.vibeValue);
-  //   data.gyroValue = gyroLoop(gv);
-  //   data.gpsValue = gpsLoop();
-  // }
-
-  // if (task_time - task_net >= 1000) {
-  //   if (WiFi.status() != WL_CONNECTED) {
-  //     wifiSetup();
-  //   }
-  //   if (WiFi.status() == WL_CONNECTED) {
-  //     wifiLoop(data);
-  //   }
-  //   data.vibeValue = false;
-  // }
-
-  // if (task_time - task_net >= 2000) {
-  //   lcdLoop();
-  // }
-
-
-  // //Test
-  // Serial.println(makeDataToJson(data));
-  // delay(1000);
 }
 
 void taskSensor(void *param) {
@@ -109,7 +86,7 @@ void taskLCDWifi(void *param) {
     data.vibeValue = false;
     lcdLoop();
     
-    delay(5000);
+    delay(3000);
   }
 }
 

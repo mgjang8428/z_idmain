@@ -1,4 +1,4 @@
-#define DEVICENO 10001
+#define DEVICENO 10002
 
 #define VIBESENSEPIN 4
 //#define GYADDR 0x0D
@@ -7,6 +7,8 @@
 #define LCDCOLUMN 2
 //gyro Calc Value
 #define GYRO_DEGREES_PER_SEC 131
+// #define SDA_2 33
+// #define SCL_2 32
 //Wifi Setting
 // #define WIFI_SSID "MG_Home_2.4G"
 // #define WIFI_PW "@@mgmn0405"

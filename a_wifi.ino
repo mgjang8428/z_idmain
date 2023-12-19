@@ -15,7 +15,6 @@ void wifiSetup() {
 }
 
 void wifiLoop(Data data) {
-  //lcdLoading();
   lcdGpsStatus(data.gpsValue.stat);
   if(WiFi.status() == WL_CONNECTED) {
     lcdNetDataSend();

@@ -1,5 +1,6 @@
 //gyro object
-MechaQMC5883 gyro;
+// MechaQMC5883 gyro;
+// MPU6050 mpu(Wire);
 //gps object
 TinyGPSPlus gps;
 
@@ -14,25 +15,27 @@ bool vibeLoop() {
 GyroValue gyroSetup() {
   int x, y, z;
   GyroValue gv = { 0, 0, 0, 0, 0, 0 };
-  // gyro.softReset();
-  gyro.init();
 
-  gyro.read(&x, &y, &z);
-  gv.initX = x;
-  gv.initY = y;
-  gv.initZ = z;
+  mpu.begin();
+  mpu.calcGyroOffsets();
+  mpu.update();
+  gv.initX = mpu.getAngleX();
+  gv.initY = mpu.getAngleY();
+  gv.initZ = mpu.getAngleZ();
 
   return gv;
 }
 
 GyroValue gyroLoop(GyroValue gv) {
   int x, y, z;
-  // GyroValue gyroValue = { 0, 0, 0, gv.initX, gv.initY, gv.initZ};
-  gyro.read(&x, &y, &z);
-  gv.x = (x - gv.initX);
-  gv.y = (y - gv.initY);
-  gv.z = (z - gv.initZ);
-  return gv;
+  GyroValue gyroValue = { 0, 0, 0, gv.initX, gv.initY, gv.initZ};
+
+  gyroValue.x = mpu.getAngleX() - gv.initX;
+  gyroValue.y = mpu.getAngleY() - gv.initY;
+  gyroValue.z = mpu.getAngleZ() - gv.initZ;
+
+
+  return gyroValue;
 }
 
 void gpsSetup() {}
@@ -52,10 +55,7 @@ GpsValue gpsLoop() {
       }
     }
   }
-  if (millis() > 5000 && gps.charsProcessed() < 10) {
-    // Serial.println(F("No GPS detected: check wiring."));
-    //while (true) {}
-  }
+
   return gpsValue;
 }
 
@@ -77,9 +77,9 @@ void displayInfo() {
 void updateSerial() {
   delay(500);
   while (Serial.available()) {
-    Serial2.write(Serial.read());  //Forward what Serial received to Software Serial Port
+    Serial2.write(Serial.read());
   }
   while (Serial2.available()) {
-    Serial.write(Serial2.read());  //Forward what Software Serial received to Serial Port
+    Serial.write(Serial2.read());
   }
 }

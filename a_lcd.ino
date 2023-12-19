@@ -7,7 +7,7 @@ int sendProcessValue = 0;
 void lcdSetup() {
   lcd.init();
   lcd.clear();
-  // lcd.backlight();
+  lcd.backlight();
   lcd.setCursor(0, 0);
   lcd.print("Device Start!!");
   lcd.setCursor(0, 1);
@@ -15,16 +15,9 @@ void lcdSetup() {
 }
 
 void lcdLoop() {
-  // lcd.clear();
-  // lcd.setCursor(0,0);
-  // lcd.print("Hello, World");
-  // lcd.setCursor(0,1);
-  // lcd.print(i);
-  // i++;
 }
 
 void lcdWifiWait() {
-  // lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Try WIFI Connect");
   lcd.setCursor(0, 1);
@@ -96,26 +89,6 @@ void lcdSendProcessing() {
       lcd.print("---->");
       sendProcessValue = 0;
       break;
-    // case 5:
-    //   lcd.print("----->");
-    //   sendProcessValue++;
-    //   break;
-    // case 6:
-    //   lcd.print("------>");
-    //   sendProcessValue++;
-    //   break;
-    // case 7:
-    //   lcd.print("------->");
-    //   sendProcessValue++;
-    //   break;
-    // case 8:
-    //   lcd.print("-------->");
-    //   sendProcessValue++;
-    //   break;
-    // case 9:
-    //   lcd.print("--------->");
-    //   sendProcessValue = 0;
-    //   break;
   }
 }
 
